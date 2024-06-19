@@ -5,27 +5,59 @@ html {
 body {
   margin: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   height: 100%;
+  background: linear-gradient(to right, #fc5c7d, #6a82fb);
+  font-family: monospace;
+  color: whitesmoke;
+}
+
+.heading {
+  color: whitesmoke;
+  padding: 10px;
+  font-size: 48px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(to right, #fc466b, #3f5efb);
+  width: 100%;
 }
 
 .calc-body {
   display: flex;
-  border: 10px solid grey;
+  border: 10px solid whitesmoke;
   flex-direction: column;
 }
 
 .display-area {
   height: 80px;
-  border: 2px solid black;
   font-size: 72px;
   padding: 5px;
   text-align: right;
+  border-bottom: 2px solid whitesmoke;
 }
 
 button {
   height: 80px;
   width: 90px;
   font-size: 32px;
+  background: linear-gradient(to right, #fc466b, #3f5efb);
+  color: whitesmoke;
+  margin: 10px;
+  border-color: whitesmoke;
+}
+
+.footer {
+  padding: 5px;
+  padding-top: 10px;
+  height: 30px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+}
+
+i {
+  color: white;
 }
