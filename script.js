@@ -103,3 +103,11 @@ const signReverseButton = document.querySelector('.sign-reverse-btn');
 const percentButton = document.querySelector('.percent-btn');
 const decimalButton = document.querySelector('.decimal-btn');
 
+clearButton.addEventListener('click', (event) => {
+  operand1 = 0;
+  operand2 = null;
+  operator = null;
+  displayValue = 0;
+  updateDisplay();
+});
+
