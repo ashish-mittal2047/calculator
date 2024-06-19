@@ -111,3 +111,31 @@ clearButton.addEventListener('click', (event) => {
   updateDisplay();
 });
 
+signReverseButton.addEventListener('click', (event) => {
+  if (operand2 === null) {
+    operand1 *= -1;
+    displayValue = operand1;
+    updateDisplay();
+    operator = null;
+  }
+  else {
+    operand2 *= -1;
+    displayValue = operand2;
+    updateDisplay();
+  }
+});
+
+percentButton.addEventListener('click', (event) => {
+  if (operand2 === null) {
+    operand1 *= 0.01;
+    displayValue = operand1;
+    updateDisplay();
+    operator = null;
+  }
+  else {
+    operand2 *= 0.01;
+    displayValue = operand2;
+    updateDisplay();
+  }
+});
+
