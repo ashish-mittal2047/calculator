@@ -2,12 +2,31 @@ let operand1 = 0;
 let operand2 = null, operator = null;
 let displayValue = 0;
 
-let numbers = document.querySelectorAll('.number');
-let binOperators = document.querySelectorAll('.binary-operators');
-let displayElement = document.querySelectorAll('.display-area');
+const numbers = document.querySelectorAll('.number');
+const binOperators = document.querySelectorAll('.binary-operators');
+const displayElement = document.querySelectorAll('.display-area');
+const equalsButton = document.querySelector('.eql-btn');
 
 function updateDisplay() {
   displayElement.textContent = displayValue;
+}
+
+let sum = () => {
+  return operand1 + operand2;
+}
+
+let difference = () => {
+  return operand1 - operand2;
+}
+
+let multiply = () => {
+  return operand1 * operand2;
+}
+
+let divide = () => {
+  if (operand2 === 0)
+    return "ERROR";
+  return operand1 / operand2
 }
 
 function computeResult() {
@@ -24,6 +43,7 @@ function computeResult() {
   else {
     result = divide();
   }
+  return result;
 }
 
 numbers.forEach((numberButton) => {
@@ -53,8 +73,28 @@ binOperators.forEach((operatorButton) => {
         operator = operatorVal;
       }
       else {
-        computeResult();
+        let result = computeResult();
+        displayValue = result;
+        operand1 = result;
+        operator = operatorVal;
+        operand2 = null;
+        updateDisplay();
       }
     }
   });
 });
+
+equalsButton.addEventListener('click', (event) => {
+  if (operand2 === null) {
+    // do nothing
+  }
+  else {
+    let result = computeResult();
+    operand1 = result;
+    operand2 = null;
+    operator = null;
+    displayValue = result;
+    updateDisplay();
+  }
+});
+
