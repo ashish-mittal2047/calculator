@@ -10,7 +10,21 @@ function updateDisplay() {
   displayElement.textContent = displayValue;
 }
 
-
+function computeResult() {
+  let result;
+  if (operator === '+') {
+    result = sum();
+  }
+  else if (operator === '-') {
+    result = difference();
+  }
+  else if (operator === '/') {
+    result = multiply();
+  }
+  else {
+    result = divide();
+  }
+}
 
 numbers.forEach((numberButton) => {
   numberButton.addEventListener('click', (event) => {
