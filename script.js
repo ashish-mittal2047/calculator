@@ -78,18 +78,26 @@ function computeResult() {
   return result;
 }
 
+function isDisplayFull() {
+  if (displayElement.textContent[0] === '-') {
+    if (displayElement.textContent.length >= 10)
+      return true;
+  }
+  else {
+    if (displayElement.textContent.length >= 9)
+      return true;
+  }
+  return false;
+}
+
 numbers.forEach((numberButton) => {
   numberButton.addEventListener('click', (event) => {
     const numValue = numberButton.textContent;
-    if (displayElement.textContent[0] === '-') {
-      if (displayElement.textContent.length >= 10)
-        return;
-    }
-    else {
-      if (displayElement.textContent.length >= 9)
-        return;
-    }
     if (operator === null) {
+      if (isDisplayFull()) {
+        return;
+      }
+
       if (Number(operand1) === 0) {
         operand1 = numValue;
       }
@@ -102,7 +110,11 @@ numbers.forEach((numberButton) => {
         operand2 = "0";
       if (Number(operand2) === 0)
         operand2 = numValue;
-      else operand2 = operand2 + numValue;
+      else {
+        if (isDisplayFull())
+          return;
+        operand2 = operand2 + numValue;
+      }
       displayValue = operand2;
       updateDisplay();
     }
@@ -207,14 +219,9 @@ percentButton.addEventListener('click', (event) => {
 
 decimalButton.addEventListener('click', (event) => {
   let displayString = displayElement.textContent;
-  if (displayString[0] === '-') {
-    if (displayString.length >= 10)
-      return;
-  }
-  else {
-    if (displayString.length >= 9)
-      return;
-  }
+  if (isDisplayFull())
+    return;
+
   if (displayString.includes('.')) {
     return;
   }
