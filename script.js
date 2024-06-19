@@ -98,7 +98,7 @@ numbers.forEach((numberButton) => {
         return;
       }
 
-      if (Number(operand1) === 0) {
+      if (!operand1.includes('.') && Number(operand1) === 0) {
         operand1 = numValue;
       }
       else operand1 = operand1 + numValue;
@@ -108,7 +108,7 @@ numbers.forEach((numberButton) => {
     else {
       if (operand2 === null)
         operand2 = "0";
-      if (Number(operand2) === 0)
+      if (!operand2.includes('.') && Number(operand2) === 0)
         operand2 = numValue;
       else {
         if (isDisplayFull())
