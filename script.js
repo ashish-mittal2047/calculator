@@ -1,10 +1,10 @@
-let operand1 = 0;
+let operand1 = "0";
 let operand2 = null, operator = null;
-let displayValue = 0;
+let displayValue = "0";
 
 const numbers = document.querySelectorAll('.number');
-const binOperators = document.querySelectorAll('.binary-operators');
-const displayElement = document.querySelectorAll('.display-area');
+const binOperators = document.querySelectorAll('.binary-operator');
+const displayElement = document.querySelector('.display-area');
 const equalsButton = document.querySelector('.eql-btn');
 
 function updateDisplay() {
@@ -12,21 +12,51 @@ function updateDisplay() {
 }
 
 let sum = () => {
-  return operand1 + operand2;
+  return Number(operand1) + Number(operand2);
 }
 
 let difference = () => {
-  return operand1 - operand2;
+  return Number(operand1) - Number(operand2);
 }
 
 let multiply = () => {
-  return operand1 * operand2;
+  return Number(operand1) * Number(operand2);
 }
 
 let divide = () => {
-  if (operand2 === 0)
+  if (Number(operand2) === 0)
     return "ERROR";
-  return operand1 / operand2
+  return Number(operand1) / Number(operand2);
+}
+
+function adjustPrecision(result) {
+  if (result != "ERROR") {
+    result = result.toString();
+    let preDecimalPart = result.split('.')[0];
+    let fractionPrecision;
+    if (preDecimalPart[0] === '-') {
+      if (preDecimalPart.length > 10) {
+        return "TOO BIG";
+      }
+      fractionPrecision = 10 - preDecimalPart.length - 1;
+    }
+    else {
+      if (preDecimalPart.length > 9) {
+        return "TOO BIG";
+      }
+      fractionPrecision = 9 - preDecimalPart.length - 1;
+    }
+    if (result.includes('.')) {
+      if (fractionPrecision >= 1) {
+        result = Number(result).toFixed(fractionPrecision);
+      }
+      else {
+        result = Number(result).toFixed(0);
+      }
+      return result.toString();
+    }
+  }
+  return result;
 }
 
 function computeResult() {
@@ -38,26 +68,43 @@ function computeResult() {
     result = difference();
   }
   else if (operator === '/') {
-    result = multiply();
-  }
-  else {
     result = divide();
   }
+  else {
+    result = multiply();
+  }
+
+  result = adjustPrecision(result);
   return result;
 }
 
 numbers.forEach((numberButton) => {
   numberButton.addEventListener('click', (event) => {
-    const numValue = Number(numberButton.textContent);
+    const numValue = numberButton.textContent;
+    if (displayElement.textContent[0] === '-') {
+      if (displayElement.textContent.length >= 10)
+        return;
+    }
+    else {
+      if (displayElement.textContent.length >= 9)
+        return;
+    }
     if (operator === null) {
-      operand1 = 10 * operand1 + numValue;
-      displayValue = operand1.toString();
-      updateDisplay(displayValue);
+      if (Number(operand1) === 0) {
+        operand1 = numValue;
+      }
+      else operand1 = operand1 + numValue;
+      displayValue = operand1;
+      updateDisplay();
     }
     else {
       if (operand2 === null)
-        operand2 = 0;
-      operand2 = 10 * operand2 + numValue;
+        operand2 = "0";
+      if (Number(operand2) === 0)
+        operand2 = numValue;
+      else operand2 = operand2 + numValue;
+      displayValue = operand2;
+      updateDisplay();
     }
   })
 });
@@ -74,10 +121,16 @@ binOperators.forEach((operatorButton) => {
       }
       else {
         let result = computeResult();
-        displayValue = result;
-        operand1 = result;
-        operator = operatorVal;
+        if (result === 'TOO BIG') {
+          operand1 = "0";
+          operator = null;
+        }
+        else {
+          operand1 = result;
+          operator = operatorVal;
+        }
         operand2 = null;
+        displayValue = result;
         updateDisplay();
       }
     }
@@ -90,9 +143,14 @@ equalsButton.addEventListener('click', (event) => {
   }
   else {
     let result = computeResult();
-    operand1 = result;
-    operand2 = null;
+    if (result === 'TOO BIG') {
+      operand1 = "0";
+    }
+    else {
+      operand1 = result;
+    }
     operator = null;
+    operand2 = null;
     displayValue = result;
     updateDisplay();
   }
@@ -104,37 +162,70 @@ const percentButton = document.querySelector('.percent-btn');
 const decimalButton = document.querySelector('.decimal-btn');
 
 clearButton.addEventListener('click', (event) => {
-  operand1 = 0;
+  operand1 = "0";
   operand2 = null;
   operator = null;
-  displayValue = 0;
+  displayValue = "0";
   updateDisplay();
 });
 
 signReverseButton.addEventListener('click', (event) => {
   if (operand2 === null) {
-    operand1 *= -1;
+    if (operand1[0] != '-')
+      operand1 = "-" + operand1;
+    else operand1 = operand1.slice(1);
     displayValue = operand1;
     updateDisplay();
     operator = null;
   }
   else {
-    operand2 *= -1;
+    if (operand2[0] != '-')
+      operand2 = "-" + operand2;
+    else operand2 = operand2.slice(1);
     displayValue = operand2;
     updateDisplay();
+    operator = null;
   }
 });
 
 percentButton.addEventListener('click', (event) => {
   if (operand2 === null) {
-    operand1 *= 0.01;
+    operand1 = Number(operand1) * 0.01;
+    operand1 = adjustPrecision(operand1);
     displayValue = operand1;
     updateDisplay();
     operator = null;
   }
   else {
-    operand2 *= 0.01;
+    operand2 = Number(operand2) * 0.01;
+    operand2 = adjustPrecision(operand2);
     displayValue = operand2;
+    updateDisplay();
+  }
+});
+
+decimalButton.addEventListener('click', (event) => {
+  let displayString = displayElement.textContent;
+  if (displayString[0] === '-') {
+    if (displayString.length >= 10)
+      return;
+  }
+  else {
+    if (displayString.length >= 9)
+      return;
+  }
+  if (displayString.includes('.')) {
+    return;
+  }
+  else {
+    if (operand2 === null) {
+      operand1 = operand1 + '.';
+      displayValue = operand1;
+    }
+    else {
+      operand2 = operand2 + '.';
+      displayValue = operand2;
+    }
     updateDisplay();
   }
 });

@@ -1,0 +1,31 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.calc-body {
+  display: flex;
+  border: 10px solid grey;
+  flex-direction: column;
+}
+
+.display-area {
+  height: 80px;
+  border: 2px solid black;
+  font-size: 72px;
+  padding: 5px;
+  text-align: right;
+}
+
+button {
+  height: 80px;
+  width: 90px;
+  font-size: 32px;
+}
