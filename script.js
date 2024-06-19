@@ -98,3 +98,8 @@ equalsButton.addEventListener('click', (event) => {
   }
 });
 
+const clearButton = document.querySelector('.clr-btn');
+const signReverseButton = document.querySelector('.sign-reverse-btn');
+const percentButton = document.querySelector('.percent-btn');
+const decimalButton = document.querySelector('.decimal-btn');
+
