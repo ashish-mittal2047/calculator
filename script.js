@@ -160,6 +160,7 @@ const clearButton = document.querySelector('.clr-btn');
 const signReverseButton = document.querySelector('.sign-reverse-btn');
 const percentButton = document.querySelector('.percent-btn');
 const decimalButton = document.querySelector('.decimal-btn');
+const deleteButton = document.querySelector('.del-btn');
 
 clearButton.addEventListener('click', (event) => {
   operand1 = "0";
@@ -230,3 +231,18 @@ decimalButton.addEventListener('click', (event) => {
   }
 });
 
+deleteButton.addEventListener('click', (event) => {
+  if (operand2 === null) {
+    operand1 = operand1.slice(0, -1);
+    if (operand1 === '')
+      operand1 = "0";
+    displayValue = operand1;
+  }
+  else {
+    operand2 = operand2.slice(0, -1);
+    if (operand2 === '')
+      operand2 = "0";
+    displayValue = operand2;
+  }
+  updateDisplay();
+});
