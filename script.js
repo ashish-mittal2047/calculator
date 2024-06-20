@@ -128,7 +128,7 @@ function numberEventHandler(event) {
 function binOperatorsEventHandler(event) {
   let operatorVal;
   if (event instanceof KeyboardEvent) {
-
+    operatorVal = event.key;
   }
   else {
     operatorVal = event.target.textContent;
@@ -276,3 +276,26 @@ percentButton.addEventListener('click', (event) => {
 decimalButton.addEventListener('click', decimalButtonEventHandler);
 
 deleteButton.addEventListener('click', deleteButtonEventHandler);
+
+/****** Attach keyboard event listeners ******/
+
+document.addEventListener('keydown', (event) => {
+  const numKeys = "0123456789";
+  const binOperatorKeys = "+-*/";
+  const equalsKey = "=";
+  if (numKeys.includes(event.key)) {
+    numberEventHandler(event);
+  }
+  else if (binOperatorKeys.includes(event.key)) {
+    binOperatorsEventHandler(event);
+  }
+  else if (equalsKey.includes(event.key)) {
+    equalsButtonEventHandler(event);
+  }
+  else if (event.key === ".") {
+    decimalButtonEventHandler(event);
+  }
+  else if (event.code === "Backspace") {
+    deleteButtonEventHandler(event);
+  }
+});
