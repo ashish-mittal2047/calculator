@@ -90,66 +90,74 @@ function isDisplayFull() {
   return false;
 }
 
-numbers.forEach((numberButton) => {
-  numberButton.addEventListener('click', (event) => {
-    const numValue = numberButton.textContent;
-    if (operator === null) {
-      if (isDisplayFull()) {
-        return;
-      }
+/********* Named event handlers ************/
+function numberEventHandler(event) {
+  let numValue;
+  if (event instanceof KeyboardEvent) {
+    numValue = event.key;
+  }
+  else numValue = event.target.textContent;
 
-      if (!operand1.includes('.') && Number(operand1) === 0) {
-        operand1 = numValue;
-      }
-      else operand1 = operand1 + numValue;
-      displayValue = operand1;
-      updateDisplay();
+  if (operator === null) {
+    if (isDisplayFull()) {
+      return;
     }
+
+    if (!operand1.includes('.') && Number(operand1) === 0) {
+      operand1 = numValue;
+    }
+    else operand1 = operand1 + numValue;
+    displayValue = operand1;
+    updateDisplay();
+  }
+  else {
+    if (operand2 === null)
+      operand2 = "0";
+    if (!operand2.includes('.') && Number(operand2) === 0)
+      operand2 = numValue;
     else {
-      if (operand2 === null)
-        operand2 = "0";
-      if (!operand2.includes('.') && Number(operand2) === 0)
-        operand2 = numValue;
-      else {
-        if (isDisplayFull())
-          return;
-        operand2 = operand2 + numValue;
-      }
-      displayValue = operand2;
-      updateDisplay();
+      if (isDisplayFull())
+        return;
+      operand2 = operand2 + numValue;
     }
-  })
-});
+    displayValue = operand2;
+    updateDisplay();
+  }
+}
 
-binOperators.forEach((operatorButton) => {
-  operatorButton.addEventListener('click', (event) => {
-    const operatorVal = operatorButton.textContent;
-    if (operator === null) {
+function binOperatorsEventHandler(event) {
+  let operatorVal;
+  if (event instanceof KeyboardEvent) {
+
+  }
+  else {
+    operatorVal = event.target.textContent;
+  }
+  if (operator === null) {
+    operator = operatorVal;
+  }
+  else {
+    if (operand2 === null) {
       operator = operatorVal;
     }
     else {
-      if (operand2 === null) {
-        operator = operatorVal;
+      let result = computeResult();
+      if (result === 'TOO BIG') {
+        operand1 = "0";
+        operator = null;
       }
       else {
-        let result = computeResult();
-        if (result === 'TOO BIG') {
-          operand1 = "0";
-          operator = null;
-        }
-        else {
-          operand1 = result;
-          operator = operatorVal;
-        }
-        operand2 = null;
-        displayValue = result;
-        updateDisplay();
+        operand1 = result;
+        operator = operatorVal;
       }
+      operand2 = null;
+      displayValue = result;
+      updateDisplay();
     }
-  });
-});
+  }
+}
 
-equalsButton.addEventListener('click', (event) => {
+function equalsButtonEventHandler(e) {
   if (operand2 === null) {
     // do nothing
   }
@@ -166,7 +174,55 @@ equalsButton.addEventListener('click', (event) => {
     displayValue = result;
     updateDisplay();
   }
+}
+
+function decimalButtonEventHandler(e) {
+  let displayString = displayElement.textContent;
+  if (isDisplayFull())
+    return;
+
+  if (displayString.includes('.')) {
+    return;
+  }
+  else {
+    if (operand2 === null) {
+      operand1 = operand1 + '.';
+      displayValue = operand1;
+    }
+    else {
+      operand2 = operand2 + '.';
+      displayValue = operand2;
+    }
+    updateDisplay();
+  }
+}
+
+function deleteButtonEventHandler(e) {
+  if (operand2 === null) {
+    operand1 = operand1.slice(0, -1);
+    if (operand1 === '')
+      operand1 = "0";
+    displayValue = operand1;
+  }
+  else {
+    operand2 = operand2.slice(0, -1);
+    if (operand2 === '')
+      operand2 = "0";
+    displayValue = operand2;
+  }
+  updateDisplay();
+}
+
+/*******************************************/
+numbers.forEach((numberButton) => {
+  numberButton.addEventListener('click', numberEventHandler);
 });
+
+binOperators.forEach((operatorButton) => {
+  operatorButton.addEventListener('click', binOperatorsEventHandler);
+});
+
+equalsButton.addEventListener('click', equalsButtonEventHandler);
 
 const clearButton = document.querySelector('.clr-btn');
 const signReverseButton = document.querySelector('.sign-reverse-btn');
@@ -217,39 +273,6 @@ percentButton.addEventListener('click', (event) => {
   }
 });
 
-decimalButton.addEventListener('click', (event) => {
-  let displayString = displayElement.textContent;
-  if (isDisplayFull())
-    return;
+decimalButton.addEventListener('click', decimalButtonEventHandler);
 
-  if (displayString.includes('.')) {
-    return;
-  }
-  else {
-    if (operand2 === null) {
-      operand1 = operand1 + '.';
-      displayValue = operand1;
-    }
-    else {
-      operand2 = operand2 + '.';
-      displayValue = operand2;
-    }
-    updateDisplay();
-  }
-});
-
-deleteButton.addEventListener('click', (event) => {
-  if (operand2 === null) {
-    operand1 = operand1.slice(0, -1);
-    if (operand1 === '')
-      operand1 = "0";
-    displayValue = operand1;
-  }
-  else {
-    operand2 = operand2.slice(0, -1);
-    if (operand2 === '')
-      operand2 = "0";
-    displayValue = operand2;
-  }
-  updateDisplay();
-});
+deleteButton.addEventListener('click', deleteButtonEventHandler);
