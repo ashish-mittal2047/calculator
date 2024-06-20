@@ -1,5 +1,4 @@
 # calculator
-Built a calculator app, marking the end of The Odin Project Foundations Section.
+A standard keyboard app, with no overflow and keyboard support. 
 
-Upcoming task - 
-Add keyboard support
+It marks the end of Foundations section of The Odin Project.
